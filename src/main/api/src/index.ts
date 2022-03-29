@@ -20,7 +20,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
     const user = event.pathParameters?.userId;
-    const concurrentStreams = 1;
+    const concurrentStreams = 4;
 
     if (user) {
         if (concurrentStreams <=3 ) {
@@ -39,7 +39,7 @@ const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
         }
     }
     else {
-        return generateResponse(event, 404, 'No user found');
+        return generateResponse(event, 400, 'Please specify a userId');
     }
 
 }

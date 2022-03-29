@@ -37,14 +37,30 @@ functions:
                   "application/json": Highlight
 resources:
   Resources:
-   concurrencyApiUrl:
-     Type: AWS::SSM::Parameter
-     Properties:
-       Description: Concurrency API URL
-       Name: /concurrency-service/dev/api/endpoint
-       Type: String
-       Value: !Join
-         - ""
-         - - "https://"
-           - !Ref ApiGatewayRestApi
-           - ".execute-api.#{AWS::Region}.amazonaws.com/dev"
+   #concurrencyApiUrl:
+   #  Type: AWS::SSM::Parameter
+   #  Properties:
+   #    Description: Concurrency API URL
+   #    Name: /concurrency-service/api/endpoint
+   #    Type: String
+   #    Value: !Join
+   #      - ""
+   #      - - "https://"
+   #        - !Ref ApiGatewayRestApi
+   #        - ".execute-api.#{AWS::Region}.amazonaws.com/dev"
+  
+    streamingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: streaming-table
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
