@@ -19,10 +19,27 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 
 const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
-    return generateResponse(event,
-        200,
-        JSON.stringify("Hello World"),
-        {
-            'content-type': 'application/json'
-        });
+    const user = event.pathParameters?.userId;
+    const concurrentStreams = 1;
+
+    if (user) {
+        if (concurrentStreams <=3 ) {
+            return generateResponse(event,
+                200,
+                JSON.stringify({
+                    user: user,
+                    concurrentStreams: concurrentStreams
+                }),
+                {
+                    'content-type': 'application/json'
+                });
+        }
+        else {
+            return generateResponse(event, 400, 'User ' + user + ' is trying to watch ' + concurrentStreams + ' concurrent streams, which is too many.');
+        }
+    }
+    else {
+        return generateResponse(event, 404, 'No user found');
+    }
+
 }
