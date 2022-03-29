@@ -1,0 +1,50 @@
+service: concurrency-service-api
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  stackName: concurrency-service-api
+  runtime: nodejs12.x
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  apiKeys:
+    - concurrency-service-api-key
+
+functions:
+  getStatus:
+    handler: src/index.handler
+    timeout: 30
+    tracing: Active
+    events:
+      - http:
+          path: /getStatus/{userId}
+          method: get
+          private: true
+          documentation:
+            summary: "Get concurrency status"
+            pathParams:
+              - name: "userId"
+                description: "Given a userId, returns the concurrency status of that user."
+                required: true
+            methodResponses:
+              - statusCode: "200"
+                responseBody:
+                  description: "The requested concurrency status."
+                responseModels:
+                  "application/json": Highlight
+resources:
+  Resources:
+   concurrencyApiUrl:
+     Type: AWS::SSM::Parameter
+     Properties:
+       Description: Concurrency API URL
+       Name: /concurrency-service/dev/api/endpoint
+       Type: String
+       Value: !Join
+         - ""
+         - - "https://"
+           - !Ref ApiGatewayRestApi
+           - ".execute-api.#{AWS::Region}.amazonaws.com/dev"
