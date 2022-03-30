@@ -93,11 +93,11 @@ const shouldReturnErrorCodeWhenMissingUserOrSessionId = async (event: APIGateway
 /*describe('other scenarios', () => {
 
     it('should not increase concurrent session count, if the sessionId provided already exists in the db for that user', async () => {
-        fail('TODO');
+        // TODO
     });
 
     it('should increase concurrent session count, if the sessionId provided doesn\'t already exist in the db for that user', async () => {
-        fail('TODO');
+        // TODO
     });
 
 });*/
