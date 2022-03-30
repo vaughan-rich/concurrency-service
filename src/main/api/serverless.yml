@@ -1,8 +1,18 @@
 service: concurrency-service-api
 
 plugins:
+  - serverless-dynamodb-local
   - serverless-offline
   - serverless-plugin-typescript
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      migrate: true
+    # noStart: true
 
 provider:
   name: aws
