@@ -22,6 +22,10 @@ A client calls the API, and the service checks how many video streams a given us
 
 ``` sls deploy ```
 
+* You can then test the API via the AWS console:
+
+![apiGateway](apiGateway.png)
+
 ## How to run the service locally:
 
 * To run the service locally, I've included the `serverless-offline` and `serverless-dynamodb-local` plugins (more information can be found here). 
