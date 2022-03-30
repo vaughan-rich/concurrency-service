@@ -1,7 +1,7 @@
 import DynamoDB from 'aws-sdk/clients/dynamodb'
 
 export const dynamoDB = new DynamoDB({apiVersion: '2012-08-10'});
-export const getConcurrentSessions = async (userId: String): Promise<number> => {
+export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.QueryOutput> => {
     const params: DynamoDB.QueryInput = {
         TableName : "streaming-table",
         KeyConditionExpression: "#pk = :pk",
@@ -17,7 +17,7 @@ export const getConcurrentSessions = async (userId: String): Promise<number> => 
     try {
         const userSessionItems = await dynamoDB.query(params).promise();
         console.log('User session items', userSessionItems);
-        return userSessionItems.Count ?? 0;
+        return userSessionItems;
     } catch (error) {
         console.log('Error fetching user session items', error)
         throw new Error(error);
@@ -27,7 +27,7 @@ export const getConcurrentSessions = async (userId: String): Promise<number> => 
 export const putUserSessionItem = async (userId: String, sessionId: String): Promise<void> => {
     const userSessionItem = {
         'pk': {'S': 'userId#' + userId},
-        'sk': {'S': userId + '#' + sessionId}
+        'sk': {'S': sessionId.toString()}
     };
     try {
         await dynamoDB

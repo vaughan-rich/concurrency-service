@@ -16,6 +16,7 @@ provider:
       Resource: 'arn:aws:dynamodb:us-east-1:225403191552:table/streaming-table'
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    MAX_CONCURRENT_STREAMS: 3
   apiKeys:
     - concurrency-service-api-key
 
