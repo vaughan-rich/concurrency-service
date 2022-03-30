@@ -55,7 +55,7 @@ curl --location --request GET 'http://localhost:3000/dev/startSession/userId/thi
 }
 ```
 
-* Once you hit `>3` requests for the same `userId`, you should expect a `400` status, with a message like this:
+* Once you hit `>3` unique sessions for the same `userId`, you should expect a `400` status, with a message like this:
 
 ```User abc is trying to watch 4 streams at once, which is too many.```
 
