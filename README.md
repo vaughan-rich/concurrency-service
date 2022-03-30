@@ -15,10 +15,11 @@ A client calls the API, and the service checks how many video streams a given us
     * AWS Lambda
     * AWS DynamoDB
     * Serverless Framework
+    * TypeScript
 
 ## How to deploy the service:
 
-* If you have an AWS account and can [authenticate via the AWS cli](https://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html), this service can be deployed using the serverless framework via the following command:
+* If you have an AWS account and can [authenticate via the AWS cli](https://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html), this service can be deployed using the serverless framework via the following command from `src/main/api`:
 
 ``` sls deploy ```
 
@@ -28,7 +29,7 @@ A client calls the API, and the service checks how many video streams a given us
 
 ## How to run the service locally:
 
-* To run the service locally, I've included the `serverless-offline` and `serverless-dynamodb-local` plugins (more information can be found here). 
+* To run the service locally, I've included the `serverless-offline` and `serverless-dynamodb-local` plugins (more information can be found [here](https://www.serverless.com/plugins/serverless-dynamodb-local)). 
 * Running the command below will automatically trigger `serverless dynamodb start` for the local database, in addition to starting up a local server to access the API:
 
 ```sls offline start```
@@ -63,7 +64,7 @@ curl --location --request GET 'http://localhost:3000/dev/startSession/userId/thi
 ```Please specify a userId and sessionId```
 
 ## Running unit tests:
-* Unit tests are written using `jest`, and can be run with the following command:
+* Unit tests are written using `jest`, and can be run with the following command from `src/main/api`:
 
 ``` npm test ```
 
@@ -75,7 +76,7 @@ curl --location --request GET 'http://localhost:3000/dev/startSession/userId/thi
 ## Improvements to be made:
 * Reduction of repeated code in `processRequest`
 * Improved logger function (e.g. with different log levels), rather than just `console.log`
-* Wider test coverage, as described in commented-out code in `index.test.ts` (e.g. covering the scenario where an active `sessionId` is provided and we don't want to update the count of concurrent sessions)
+* Wider test coverage, as described in commented-out code in `index.test.ts` (e.g. covering the scenario where an already active `sessionId` is provided and we don't want to update the count of concurrent sessions)
 
 ## Other approaches to the solution:
-* A messaging pattern to handle many senders at once, where the lambda processes the messages in batches? (e.g SQS/Kinesis)
+* A messaging pattern to handle many senders at once, where the lambda processes the messages in batches (e.g SQS/Kinesis)?
