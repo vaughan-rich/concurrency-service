@@ -8,6 +8,12 @@ provider:
   name: aws
   stackName: concurrency-service-api
   runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:PutItem
+      Resource: 'arn:aws:dynamodb:us-east-1:225403191552:table/streaming-table'
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   apiKeys:
@@ -36,19 +42,7 @@ functions:
                 responseModels:
                   "application/json": Highlight
 resources:
-  Resources:
-   #concurrencyApiUrl:
-   #  Type: AWS::SSM::Parameter
-   #  Properties:
-   #    Description: Concurrency API URL
-   #    Name: /concurrency-service/api/endpoint
-   #    Type: String
-   #    Value: !Join
-   #      - ""
-   #      - - "https://"
-   #        - !Ref ApiGatewayRestApi
-   #        - ".execute-api.#{AWS::Region}.amazonaws.com/dev"
-  
+  Resources:  
     streamingTable:
       Type: AWS::DynamoDB::Table
       Properties:
