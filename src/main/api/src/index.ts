@@ -12,7 +12,6 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
             {
                 requestId: event.requestContext.requestId,
                 requestPath: event.path,
-                queryStringParameters: event.queryStringParameters,
                 event,
                 err
             });

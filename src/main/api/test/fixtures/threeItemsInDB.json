@@ -1,0 +1,1 @@
+{ "Items": [ { "pk": { "S": "userId#123" }, "sk": { "S": "abcdef" } }, { "pk": { "S": "userId#123" }, "sk": { "S": "abcdefghi" } }, { "pk": { "S": "userId#123" }, "sk": { "S": "abcdefghijkl" } } ], "Count": 3, "ScannedCount": 3 }

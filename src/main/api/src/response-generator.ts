@@ -21,7 +21,7 @@ export const generateResponse = (event: APIGatewayEvent, statusCode: number, bod
     }
 
     if(statusCode === 200) {
-        console.log('getSessionStatus good response', log);
+        console.log('getSessionStatus success response', log);
     } else {
         console.log('getSessionStatus error response', log)
     }
