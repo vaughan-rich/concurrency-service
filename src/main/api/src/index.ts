@@ -1,12 +1,12 @@
 import {APIGatewayEvent, APIGatewayProxyResult} from 'aws-lambda';
 import {generateResponse} from './response-generator';
-import {putUserStreamItem, getConcurrentStreams} from './userStreamRepository';
+import {putUserSessionItem, getConcurrentSessions} from './sessionsRepository';
 
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
     try {
         return await processRequest(event)
     } catch (err) {
-        console.error('getStatus unexpected error',
+        console.error('getSessionStatus unexpected error',
             {
                 requestId: event.requestContext.requestId,
                 requestPath: event.path,
@@ -21,22 +21,23 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
 const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
 
     const user = event.pathParameters?.userId;
-    if (!user) {
-        return generateResponse(event, 400, 'Please specify a userId');
+    const session = event.pathParameters?.sessionId;
+    if (!user || !session) {
+        return generateResponse(event, 400, 'Please specify a userId and sessionId');
     }
 
-    let concurrentStreams: number;
+    let concurrentSessions: number;
     try {
-        concurrentStreams = await getConcurrentStreams(user);
+        concurrentSessions = await getConcurrentSessions(user);
     } catch (error) {
         const errorMessage = `DB query error: ${error.toString()}`;
         throw new Error(errorMessage);
     }
 
-    if (concurrentStreams <=2 ) {
+    if (concurrentSessions <=2 ) {
         try {
-            await putUserStreamItem(user);
-            concurrentStreams++
+            await putUserSessionItem(user, session);
+            concurrentSessions++
         } catch (error) {
             const errorMessage = `DB put error: ${error.toString()}`;
             throw new Error(errorMessage);
@@ -46,13 +47,13 @@ const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
             200,
             JSON.stringify({
                 user: user,
-                concurrentStreams: concurrentStreams
+                concurrentSessions: concurrentSessions
             }),
             {
                 'content-type': 'application/json'
             });
     }
     else {
-        return generateResponse(event, 400, 'User ' + user + ' is trying to watch ' + (concurrentStreams+1) + ' concurrent streams, which is too many.');
+        return generateResponse(event, 400, 'User ' + user + ' is trying to watch ' + (concurrentSessions+1) + ' streams at once, which is too many.');
     }
 }

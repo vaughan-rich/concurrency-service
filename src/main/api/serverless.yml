@@ -20,25 +20,28 @@ provider:
     - concurrency-service-api-key
 
 functions:
-  getStatus:
+  getSessionStatus:
     handler: src/index.handler
     timeout: 30
     tracing: Active
     events:
       - http:
-          path: /getStatus/{userId}
+          path: /startSession/userId/{userId}/sessionId/{sessionId}
           method: get
           private: true
           documentation:
-            summary: "Get concurrency status"
+            summary: "Gets concurrency status of a user, as they start a stream"
             pathParams:
               - name: "userId"
-                description: "Given a userId, returns the concurrency status of that user."
+                description: "The ID of a user starting a stream"
+                required: true
+              - name: "sessionId"
+                description: "A unique ID associated with that streaming session"
                 required: true
             methodResponses:
               - statusCode: "200"
                 responseBody:
-                  description: "The requested concurrency status."
+                  description: "Returns the concurrency status for that user"
                 responseModels:
                   "application/json": Highlight
 resources:
