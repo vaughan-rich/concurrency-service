@@ -1,22 +1,18 @@
 import {APIGatewayEvent, APIGatewayProxyResult} from 'aws-lambda';
 
 export const generateResponse = (event: APIGatewayEvent, statusCode: number, body: string, headers?: {[header: string]: boolean | number | string}): APIGatewayProxyResult => {
-    console.log('getStatus log',
+    console.log('getSessionStatus log',
         {
             requestId: event.requestContext.requestId,
             requestPath: event.path,
-            queryStringParameters: event.queryStringParameters,
             statusCode,
-            headers,
             event,
             body
         })
     const log = {
         requestId: event.requestContext.requestId,
         requestPath: event.path,
-        queryStringParameters: event.queryStringParameters,
-        statusCode,
-        headers
+        statusCode
     }
     const response = {
         statusCode,
@@ -25,9 +21,9 @@ export const generateResponse = (event: APIGatewayEvent, statusCode: number, bod
     }
 
     if(statusCode === 200) {
-        console.log('getStatus response', log);
+        console.log('getSessionStatus good response', log);
     } else {
-        console.log('getStatus error response', log)
+        console.log('getSessionStatus error response', log)
     }
 
     return response

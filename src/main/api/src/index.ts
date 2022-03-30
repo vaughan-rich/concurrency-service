@@ -29,7 +29,7 @@ const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     }
 
     let concurrentSessions: number;
-    let sessionsList: any;
+    let sessionsList :(string | undefined)[] | undefined;
     try {
         const sessions = await getConcurrentSessions(user);
         sessionsList = sessions.Items?.map(x => x.sk.S);
@@ -39,7 +39,7 @@ const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
         throw new Error(errorMessage);
     }
 
-    if (sessionsList.includes(session)) { //this session is already active, so skip adding to the DB
+    if (sessionsList?.includes(session)) { // this session is already active, so skip adding to the DB
         if (concurrentSessions <= maxStreams) {
             return generateResponse(event,
                 200,

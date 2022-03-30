@@ -16,7 +16,7 @@ export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.Qu
     };
     try {
         const userSessionItems = await dynamoDB.query(params).promise();
-        console.log('User session items', userSessionItems);
+        console.log('User session items', JSON.stringify(userSessionItems));
         return userSessionItems;
     } catch (error) {
         console.log('Error fetching user session items', error)
