@@ -1,6 +1,6 @@
 import DynamoDB from 'aws-sdk/clients/dynamodb'
 
-export const dynamoDB = new DynamoDB({apiVersion: '2012-08-10'});
+export const dynamoDB = new DynamoDB({apiVersion: '2012-08-10', region: 'localhost', endpoint: 'http://localhost:8000'});
 export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.QueryOutput> => {
     const params: DynamoDB.QueryInput = {
         TableName : "streaming-table",
