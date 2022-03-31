@@ -1,0 +1,74 @@
+service: concurrency-service-api
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-plugin-typescript
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      migrate: true
+    # noStart: true
+
+provider:
+  name: aws
+  stackName: concurrency-service-api
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:PutItem
+      Resource: 'arn:aws:dynamodb:us-east-1:225403191552:table/streaming-table'
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    MAX_CONCURRENT_STREAMS: 3
+  apiKeys:
+    - concurrency-service-api-key
+
+functions:
+  getSessionStatus:
+    handler: src/index.handler
+    timeout: 30
+    tracing: Active
+    events:
+      - http:
+          path: /startSession/userId/{userId}/sessionId/{sessionId}
+          method: get
+          private: true
+          documentation:
+            summary: "Gets concurrency status of a user, as they start a stream"
+            pathParams:
+              - name: "userId"
+                description: "The ID of a user starting a stream"
+                required: true
+              - name: "sessionId"
+                description: "A unique ID associated with that streaming session"
+                required: true
+            methodResponses:
+              - statusCode: "200"
+                responseBody:
+                  description: "Returns the concurrency status for that user"
+                responseModels:
+                  "application/json": Highlight
+resources:
+  Resources:  
+    streamingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: streaming-table
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
