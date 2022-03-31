@@ -1,6 +1,12 @@
 import DynamoDB from 'aws-sdk/clients/dynamodb'
 
-export const dynamoDB = new DynamoDB({apiVersion: '2012-08-10', region: 'localhost', endpoint: 'http://localhost:8000'});
+export const dynamoDB = new DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000',
+    accessKeyId: 'xxxx', // these can be left as xxxx, they just need to have some value to run locally
+    secretAccessKey: 'xxxx',
+    });
+
 export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.QueryOutput> => {
     const params: DynamoDB.QueryInput = {
         TableName : "streaming-table",
@@ -9,9 +15,7 @@ export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.Qu
             '#pk': 'pk'
         },
         ExpressionAttributeValues: {
-            ':pk': {
-                S: 'userId#' + userId
-            }
+            ':pk': 'userId#' + userId
         }
     };
     try {
@@ -26,12 +30,12 @@ export const getConcurrentSessions = async (userId: String): Promise<DynamoDB.Qu
 
 export const putUserSessionItem = async (userId: String, sessionId: String): Promise<void> => {
     const userSessionItem = {
-        'pk': {'S': 'userId#' + userId},
-        'sk': {'S': sessionId.toString()}
+        'pk': 'userId#' + userId,
+        'sk': sessionId.toString()
     };
     try {
         await dynamoDB
-            .putItem({
+            .put({
                 TableName: 'streaming-table',
                 Item: userSessionItem
             })
