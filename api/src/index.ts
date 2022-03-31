@@ -28,10 +28,10 @@ const processRequest = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     }
 
     let concurrentSessions: number;
-    let sessionsList :(string | undefined)[] | undefined;
+    let sessionsList :any;
     try {
         const sessions = await getConcurrentSessions(user);
-        sessionsList = sessions.Items?.map(x => x.sk.S);
+        sessionsList = sessions.Items?.map(x => x.sk);
         concurrentSessions = sessions.Count ?? 0;
     } catch (error) {
         const errorMessage = `DB query error: ${error.toString()}`;
