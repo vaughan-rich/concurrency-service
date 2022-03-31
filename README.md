@@ -89,7 +89,7 @@ curl --location --request GET 'http://localhost:3000/dev/startSession/userId/thi
 ```Please specify a userId and sessionId```
 
 ## Running unit tests:
-* Unit tests are written using `jest`, and can be run with the following command from `src/main/api`:
+* Unit tests are written using `jest`, and can be run with the following command from `/api`:
 
 ``` npm test ```
 
