@@ -17,9 +17,27 @@ A client calls the API, and the service checks how many video streams a given us
     * Serverless Framework
     * TypeScript
 
+## Set up the repo with the following commands:
+
+* Navigate to the `/api` folder:
+
+``` cd api ```
+
+* To install dependencies:
+
+``` npm install ```
+
+* Install serverless globally, using the following command (if you get a permissions denied error, you can prefix with `sudo`).
+
+``` npm install serverless -g ``` 
+
+* Once you are done with all the testing steps in the rest of README, you can uninstall this using the following command:
+
+``` npm uninstall serverless -g ```
+
 ## How to deploy the service:
 
-* If you have an AWS account and can [authenticate via the AWS cli](https://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html), this service can be deployed using the serverless framework via the following command from `src/main/api`:
+* If you have an AWS account and can [authenticate via the AWS cli](https://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html), this service can be deployed using the serverless framework via the following command from `/api`:
 
 ``` sls deploy ```
 
@@ -29,8 +47,13 @@ A client calls the API, and the service checks how many video streams a given us
 
 ## How to run the service locally:
 
-* To run the service locally, I've included the `serverless-offline` and `serverless-dynamodb-local` plugins (more information can be found [here](https://www.serverless.com/plugins/serverless-dynamodb-local)). 
-* Running the command below will automatically trigger `serverless dynamodb start` for the local database, in addition to starting up a local server to access the API:
+* To run the service locally, run the following commands. First, to set up the local instance of dynamoDB:
+
+```sls dynamodb install``
+
+* (More information about local serverless dynamoDB [here](https://www.serverless.com/plugins/serverless-dynamodb-local)).
+
+* Now that the local dynamoDB table is set up, run the following command to compile and run the service:
 
 ```sls offline start```
 
@@ -43,6 +66,8 @@ A client calls the API, and the service checks how many video streams a given us
 ``` 
 curl --location --request GET 'http://localhost:3000/dev/startSession/userId/thisIsaTestUserId/sessionId/thisIsaTestSessionId' --header 'Content-Type: application/json' --header 'x-api-key:{{KEY_THAT_IS_REFERENCED_IN_THE_TERMINAL}}' 
 ```
+
+* Please note that in the above request, `{{KEY_THAT_IS_REFERENCED_IN_THE_TERMINAL}}` should be replaced with the value found in the terminal when you first run the service (`Key with token: xxxxxxxxxxxxxx`).
 
 ## Expected responses
 
