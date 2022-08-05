@@ -1,4 +1,6 @@
-# The Concurrency Service
+# The Concurrency Service: _a technical interview task_
+
+
 A Node.js service to catch out the account-sharers!
 
 A client calls the API, and the service checks how many video streams a given user is watching. If it's more than 3 concurrent streams, the API will return an error code.
