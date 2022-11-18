@@ -51,7 +51,7 @@ A client calls the API, and the service checks how many video streams a given us
 
 * To run the service locally, run the following commands. First, to set up the local instance of dynamoDB:
 
-```sls dynamodb install``
+``` sls dynamo install ```
 
 * (More information about local serverless dynamoDB [here](https://www.serverless.com/plugins/serverless-dynamodb-local)).
 
